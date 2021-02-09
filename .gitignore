@@ -1,0 +1,7 @@
+# Gitignore #
+
+# IDE/Compilation:
+*.idea
+
+# (LOG: Personal) Files
+einsum_tests.py
