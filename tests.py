@@ -15,8 +15,8 @@ Y_test = utils.one_hot_encode(Y_test)
 training_data = utils.np_to_list_tuples(X_train, Y_train)
 test_data = utils.np_to_list_tuples(X_test, Y_test)
 
-mnist_layers = [X_train.shape[1], 32, 16, 10]
+mnist_layers = [X_train.shape[1], 64, 16, 10]
 mnist_net = NN.NeuralNet(mnist_layers, "logistic")
-mnist_net.SGD(training_data, epochs=10, mini_batch_size=25, test_data=test_data[9500:])
+mnist_net.SGD(training_data, epochs=50, mini_batch_size=50, test_data=test_data[9500:])
 print(mnist_net.one_hot_evaluate(X_test, Y_test))
 

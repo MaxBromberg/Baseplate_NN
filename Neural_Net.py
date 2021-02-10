@@ -15,7 +15,7 @@ random.seed(42)
 
 def cost(x, y):
     assert len(x) == len(y), "final layer dim != test result dim, consider one hot encoding"
-    return (x-y) * (x-y)
+    return (x-y) * (x-y) / len(y)
 
 
 def cost_prime(x, y):
@@ -110,8 +110,8 @@ class NeuralNet:
     # Logs:
     def log_network_shapes(self):
         print(f"weights: {[self.weights[i].shape for i in range(len(self.weights))]} ")
-        print(f"nodes: {[self.nodes[i].shape for i in range(len(self.nodes))]}")
         print(f"biases: {[self.biases[i].shape for i in range(len(self.biases))]}")
+        # print(f"nodes: {[self.nodes[i].shape for i in range(len(self.nodes))]}")
 
     # tests
     def one_hot_evaluate(self, X, Y):
