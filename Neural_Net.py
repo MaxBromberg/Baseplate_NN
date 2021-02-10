@@ -14,6 +14,7 @@ random.seed(42)
 
 
 def cost(x, y):
+    assert len(x) == len(y), "final layer dim != test result dim, consider one hot encoding"
     return (x-y) * (x-y)
 
 
@@ -31,7 +32,7 @@ class NeuralNet:
         # Random initialization of (dense) weights and biases, hidden nodes.
         self.weights = [np.random.rand(self.NN_shape[layer+1], self.NN_shape[layer]) for layer in range(len(self.NN_shape[:-1]))]
         self.biases = [-np.random.rand(layer) for layer in self.NN_shape[1:]]
-        self.nodes = [np.zeros(NN_dimensions[0]), *[np.random.rand(layer) for layer in self.NN_shape[1:-1]], np.empty(NN_dimensions[-1])]
+        # self.nodes = [np.zeros(NN_dimensions[0]), *[np.random.rand(layer) for layer in self.NN_shape[1:-1]], np.empty(NN_dimensions[-1])]
 
         self.activation_fct = activation_fct
         self.AF = af.ActivationFunctions(a=0, b=1)
@@ -112,5 +113,29 @@ class NeuralNet:
         print(f"nodes: {[self.nodes[i].shape for i in range(len(self.nodes))]}")
         print(f"biases: {[self.biases[i].shape for i in range(len(self.biases))]}")
 
+    # tests
+    def one_hot_evaluate(self, X, Y):
+        # returns percentage correct
+        return sum([1 for x, y, in zip(X, Y) if np.argmax(self.feedforward(x)) == np.argmax(y)]) / len(Y)
+
+
+if __name__ == "__main__":
+    # CHECK VERSIONS
+    vers_python0 = '3.8.6'
+    vers_numpy0 = '1.95.0'
+    vers_matplotlib0 = '3.3.4'
+
+    from sys import version_info
+    from matplotlib import __version__ as vers_matplotlib
+
+    vers_python = '%s.%s.%s' % version_info[:3]
+    vers_numpy = np.__version__
+
+    print('\n------------------- Baseplate Neural Network ----------------------------\n')
+    print('Required modules:')
+    print('Python:        tested for: %s.  Yours: %s' % (vers_python0, vers_python))
+    print('numpy:         tested for: %s.  Yours: %s' % (vers_numpy0, vers_numpy))
+    # print('matplotlib:    tested for: %s.  Yours: %s' % (vers_matplotlib0, vers_matplotlib))
+    print('\n------------------------------------------------------------------------------\n')
 
 

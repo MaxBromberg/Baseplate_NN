@@ -1,15 +1,22 @@
 import Neural_Net as NN
+import utils
 import numpy as np
+from tensorflow.keras.datasets import mnist  # yes, a tf install, but just for the easy mnist import.
 from matplotlib import pyplot as plt
 
-virtual_samples = 100
-layer_dims = [100, 20, 8, 2]
-test_net = NN.NeuralNet(layer_dims, "logistic")
-test_net.log_network_shapes()
-# print(test_net.feedforward(x=np.random.rand(test_net.NN_shape[0])))
-# test_net.backpropagation(x=np.random.rand(test_net.NN_shape[0]), y=np.random.rand(test_net.NN_shape[-1]))
 
-fake_data = np.array([(np.random.rand(test_net.NN_shape[0]), np.random.rand(test_net.NN_shape[-1])) for _ in range(virtual_samples)], dtype=object)
-fake_test_data = np.array([(np.random.rand(test_net.NN_shape[0]), np.random.rand(test_net.NN_shape[-1])) for _ in range(virtual_samples)], dtype=object)
-test_net.SGD(fake_data, epochs=10, mini_batch_size=int(0.1*fake_data.shape[0]), test_data=fake_test_data)
+(X_train, Y_train), (X_test, Y_test) = mnist.load_data()
+# Flattening 28x28 pixel digits
+X_train = X_train.reshape(X_train.shape[0], X_train.shape[1]*X_train.shape[2])
+X_test = X_test.reshape(X_test.shape[0], X_test.shape[1]*X_test.shape[2])
+# One hot encoding Y data
+Y_train = utils.one_hot_encode(Y_train)
+Y_test = utils.one_hot_encode(Y_test)
+training_data = utils.np_to_list_tuples(X_train, Y_train)
+test_data = utils.np_to_list_tuples(X_test, Y_test)
+
+mnist_layers = [X_train.shape[1], 32, 16, 10]
+mnist_net = NN.NeuralNet(mnist_layers, "logistic")
+mnist_net.SGD(training_data, epochs=10, mini_batch_size=25, test_data=test_data[9500:])
+print(mnist_net.one_hot_evaluate(X_test, Y_test))
 
